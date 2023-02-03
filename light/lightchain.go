@@ -21,6 +21,8 @@ package light
 import (
 	"context"
 	"errors"
+	geth_mamoru_core_sdk "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/tracer"
 	"math/big"
 	"sync"
 	"sync/atomic"
@@ -438,6 +440,36 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header, checkFreq int) (i
 	case core.SideStatTy:
 		lc.chainSideFeed.Send(core.ChainSideEvent{Block: block})
 	}
+	//////////////////////////////////////////////////////////////////
+	if !geth_mamoru_core_sdk.IsSnifferEnable() {
+		return 0, nil
+	}
+	ctx := context.Background()
+
+	lastBlock, err := lc.GetBlockByNumber(ctx, block.NumberU64())
+	if err != nil {
+		return 0, err
+	}
+
+	parentBlock, err := lc.GetBlockByHash(ctx, block.ParentHash())
+	if err != nil {
+		return 0, err
+	}
+
+	log.Info("Sniffer start", "number", lastBlock.NumberU64())
+
+	stateDb := NewState(ctx, parentBlock.Header(), lc.Odr())
+	receipts, err := GetBlockReceipts(ctx, lc.Odr(), lastBlock.Hash(), lastBlock.Number().Uint64())
+	if err != nil {
+		return 0, err
+	}
+
+	geth_mamoru_core_sdk.Trace(ctx,
+		tracer.NewTracerConfig(stateDb.Copy(), lc.Config(), lc),
+		lastBlock,
+		receipts,
+	)
+	//////////////////////////////////////////////////////////////////
 	return 0, err
 }
 
