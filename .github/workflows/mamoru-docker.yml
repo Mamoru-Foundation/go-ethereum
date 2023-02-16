@@ -2,7 +2,7 @@ name: "Build docker image"
 on:
   push:
     branches:
-      - geth_mamoru_core_sdk
+      - main
 
 env:
   REPOSITORY: mamorufoundation/go-ethereum-sniffer

@@ -3,11 +3,11 @@ name: Unit Test
 on:
   push:
     branches: 
-      - geth_mamoru_core_sdk
+      - main
 
   pull_request:
     branches: 
-      - geth_mamoru_core_sdk
+      - main
 
 jobs:
   unit-test:
