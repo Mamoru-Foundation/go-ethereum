@@ -33,6 +33,8 @@ github.com/DATA-DOG/go-sqlmock v1.3.3/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q
 github.com/DataDog/zstd v1.5.2 h1:vUG4lAyuPCXO0TLbXvPv7EB7cNK1QV/luu55UHLrrn8=
 github.com/DataDog/zstd v1.5.2/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwSAmyw=
 github.com/Joker/hpp v1.0.0/go.mod h1:8x5n+M1Hp5hC0g8okX3sR3vFQwynaX/UgSOM9MeBKzY=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.1.0 h1:SEILioAY1e/Sn4755bIr6yrQF1Wjogg9WmFbD2cYNq0=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.1.0/go.mod h1:PLk4E3zptuHMlDQprFsCB8rMqhAgE9ZHxPhpwzkN9us=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.1.3 h1:n+9sNoDxLzaOBWrnBwRYxYnmrWwC3Y+mqRLLIfQXzA8=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.1.3/go.mod h1:hnmSj2y/1Ddi4I5tyXVyMPIHslvfNZARuLpbVKwr32s=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
