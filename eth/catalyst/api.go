@@ -237,6 +237,10 @@ func (api *ConsensusAPI) forkchoiceUpdated(update engine.ForkchoiceStateV1, payl
 			log.Warn("Forkchoice requested unknown head", "hash", update.HeadBlockHash)
 			return engine.STATUS_SYNCING, nil
 		}
+		// If the finalized hash is known, we can direct the downloader to move
+		// potentially more data to the freezer from the get go.
+		finalized := api.remoteBlocks.get(update.FinalizedBlockHash)
+
 		// Header advertised via a past newPayload request. Start syncing to it.
 		// Before we do however, make sure any legacy sync in switched off so we
 		// don't accidentally have 2 cycles running.
@@ -244,8 +248,16 @@ func (api *ConsensusAPI) forkchoiceUpdated(update engine.ForkchoiceStateV1, payl
 			merger.ReachTTD()
 			api.eth.Downloader().Cancel()
 		}
-		log.Info("Forkchoice requested sync to new head", "number", header.Number, "hash", header.Hash())
-		if err := api.eth.Downloader().BeaconSync(api.eth.SyncMode(), header); err != nil {
+		context := []interface{}{"number", header.Number, "hash", header.Hash()}
+		if update.FinalizedBlockHash != (common.Hash{}) {
+			if finalized == nil {
+				context = append(context, []interface{}{"finalized", "unknown"}...)
+			} else {
+				context = append(context, []interface{}{"finalized", finalized.Number}...)
+			}
+		}
+		log.Info("Forkchoice requested sync to new head", context...)
+		if err := api.eth.Downloader().BeaconSync(api.eth.SyncMode(), header, finalized); err != nil {
 			return engine.STATUS_SYNCING, err
 		}
 		return engine.STATUS_SYNCING, nil
@@ -448,7 +460,7 @@ func (api *ConsensusAPI) newPayload(params engine.ExecutableData) (engine.Payloa
 	block, err := engine.ExecutableDataToBlock(params)
 	if err != nil {
 		log.Debug("Invalid NewPayload params", "params", params, "error", err)
-		return engine.PayloadStatusV1{Status: engine.INVALIDBLOCKHASH}, nil
+		return engine.PayloadStatusV1{Status: engine.INVALID}, nil
 	}
 	// Stash away the last update to warn the user if the beacon client goes offline
 	api.lastNewPayloadLock.Lock()
@@ -785,8 +797,11 @@ func (api *ConsensusAPI) GetPayloadBodiesByHashV1(hashes []common.Hash) []*engin
 // GetPayloadBodiesByRangeV1 implements engine_getPayloadBodiesByRangeV1 which allows for retrieval of a range
 // of block bodies by the engine api.
 func (api *ConsensusAPI) GetPayloadBodiesByRangeV1(start, count hexutil.Uint64) ([]*engine.ExecutionPayloadBodyV1, error) {
-	if start == 0 || count == 0 || count > 1024 {
+	if start == 0 || count == 0 {
 		return nil, engine.InvalidParams.With(fmt.Errorf("invalid start or count, start: %v count: %v", start, count))
+	}
+	if count > 1024 {
+		return nil, engine.TooLargeRequest.With(fmt.Errorf("requested count too large: %v", count))
 	}
 	// limit count up until current
 	current := api.eth.BlockChain().CurrentBlock().NumberU64()
