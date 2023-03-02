@@ -1466,7 +1466,7 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 	}
 
 	////////////////////////////////////////////////////////////
-	if !mamoru.IsSnifferEnable() {
+	if !mamoru.IsSnifferEnable() || !mamoru.Connect() {
 		return 0, nil
 	}
 
