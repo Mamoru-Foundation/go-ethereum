@@ -3,12 +3,12 @@ name: Build Test
 on:
   push:
     branches: 
-      - geth_mamoru_core_sdk
+      - master
 
 
   pull_request:
     branches: 
-      - geth_mamoru_core_sdk
+      - master
 
 
 jobs:
