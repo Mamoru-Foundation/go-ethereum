@@ -128,6 +128,6 @@ require (
 )
 
 require (
-	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.0-1.1.1
-	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.1.4 // indirect
+	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.3-1.1.2
+	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.2.1 // indirect
 )
