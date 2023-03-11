@@ -12,7 +12,7 @@ on:
 
 
 jobs:
-  unit-test:
+  build-test:
     runs-on: ubuntu-latest
     steps:
     - name: Install Go
