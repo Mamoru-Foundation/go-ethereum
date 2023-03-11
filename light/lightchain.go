@@ -38,6 +38,10 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
+
+	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/call_tracer"
+	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 )
 
 var (
@@ -72,6 +76,8 @@ type LightChain struct {
 	// Atomic boolean switches:
 	stopped       atomic.Bool // whether LightChain is stopped or running
 	procInterrupt atomic.Bool // interrupts chain insert
+
+	Sniffer *mamoru.Sniffer // Sniffer for Mamoru
 }
 
 // NewLightChain returns a fully initialised light chain using information
@@ -87,6 +93,8 @@ func NewLightChain(odr OdrBackend, config *params.ChainConfig, engine consensus.
 		bodyRLPCache:  lru.NewCache[common.Hash, rlp.RawValue](bodyCacheLimit),
 		blockCache:    lru.NewCache[common.Hash, *types.Block](blockCacheLimit),
 		engine:        engine,
+
+		Sniffer: mamoru.NewSniffer(), // Sniffer for Mamoru
 	}
 	bc.forker = core.NewForkChoice(bc, nil)
 	var err error
@@ -416,6 +424,52 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header) (int, error) {
 	case core.SideStatTy:
 		lc.chainSideFeed.Send(core.ChainSideEvent{Block: block})
 	}
+	//////////////////////////////////////////////////////////////////
+	if !lc.Sniffer.CheckRequirements() {
+		return 0, nil
+	}
+
+	ctx := context.Background()
+
+	lastBlock, err := lc.GetBlockByNumber(ctx, block.NumberU64())
+	if err != nil {
+		return 0, err
+	}
+
+	parentBlock, err := lc.GetBlockByHash(ctx, block.ParentHash())
+	if err != nil {
+		return 0, err
+	}
+
+	stateDb := NewState(ctx, parentBlock.Header(), lc.Odr())
+	receipts, err := GetBlockReceipts(ctx, lc.Odr(), lastBlock.Hash(), lastBlock.Number().Uint64())
+	if err != nil {
+		return 0, err
+	}
+
+	startTime := time.Now()
+	log.Info("Mamoru Eth Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxLightchain)
+
+	tracer := mamoru.NewTracer(mamoru.NewFeed(lc.Config(), statistics.NewStatsBlockchain()))
+	tracer.FeedBlock(block)
+	tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
+	tracer.FeedEvents(receipts)
+
+	//Launch EVM and Collect Call Trace data
+	txTrace, err := call_tracer.TraceBlock(ctx, call_tracer.NewTracerConfig(stateDb.Copy(), lc.Config(), lc), lastBlock)
+	if err != nil {
+		log.Error("Mamoru Eth Sniffer Error", "err", err, "ctx", mamoru.CtxLightchain)
+		return 0, err
+	}
+	var callTraces []*mamoru.CallFrame
+	for _, call := range txTrace {
+		callFrames := call.Result
+		callTraces = append(callTraces, callFrames...)
+	}
+
+	tracer.FeedCallTraces(callTraces, block.NumberU64())
+	tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxLightchain)
+	//////////////////////////////////////////////////////////////////
 	return 0, err
 }
 
