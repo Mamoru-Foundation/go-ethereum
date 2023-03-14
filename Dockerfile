@@ -4,9 +4,10 @@ ARG VERSION=""
 ARG BUILDNUM=""
 
 # Build Geth in a stock Go builder container
-FROM golang:1.20-alpine as builder
+FROM golang:1.20 as builder
 
-RUN apk add --no-cache gcc musl-dev linux-headers git curl tar
+RUN apt-get update  \
+    && apt-get install -y  gcc musl-dev git curl tar libc6-dev
 
 # Get dependencies - will also be cached if we won't change go.mod/go.sum
 COPY go.mod /go-ethereum/
@@ -19,14 +20,16 @@ RUN cd /go-ethereum && go run build/ci.go install ./cmd/geth
 # Install the Lighthouse Consensus Client
 RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/v3.5.1/lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz
 RUN tar xvf lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz  \
-    && cp lighthouse /usr/local/bin &&  \
-    rm lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz &&  \
-    rm lighthouse
+    && cp lighthouse /usr/local/bin  \
+    && rm lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz  \
+    && rm lighthouse
 
 # Pull Geth into a second stage deploy debian container
 FROM debian:bullseye-slim
 
-RUN apt-get update && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor
+RUN apt-get update  \
+    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor  \
+    && apt-get clean
 
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
@@ -35,7 +38,7 @@ COPY docker/supervisord/gethlighthousebn.conf /etc/supervisor/conf.d/supervisord
 
 EXPOSE 9000 8545 8546 30303 30303/udp
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 # Add some metadata labels to help programatic image consumption
 ARG COMMIT=""
 ARG VERSION=""
