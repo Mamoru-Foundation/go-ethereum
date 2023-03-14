@@ -4,9 +4,9 @@ ARG VERSION=""
 ARG BUILDNUM=""
 
 # Build Geth in a stock Go builder container
-FROM golang:1.20-alpine as builder
+FROM golang:1.20 as builder
 
-RUN apk add --no-cache gcc musl-dev linux-headers git curl tar
+RUN apt-get update && apt-get install -y gcc musl-dev linux-headers-generic git curl tar
 
 # Get dependencies - will also be cached if we won't change go.mod/go.sum
 COPY go.mod /go-ethereum/
@@ -14,7 +14,7 @@ COPY go.sum /go-ethereum/
 RUN cd /go-ethereum && go mod download
 
 ADD . /go-ethereum
-RUN cd /go-ethereum && go run build/ci.go install -static ./cmd/geth
+RUN cd /go-ethereum && go run build/ci.go install ./cmd/geth
 
 # Install the Lighthouse Consensus Client
 RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/v3.5.1/lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz
