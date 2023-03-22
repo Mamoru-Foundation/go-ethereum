@@ -446,7 +446,7 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header) (int, error) {
 
 	tracer := mamoru.NewTracer(mamoru.NewFeed(lc.Config()))
 	tracer.FeedBlock(block)
-	tracer.FeedTransactions(block, receipts)
+	tracer.FeedTransactions(block.Number(), block.Transactions(), receipts)
 	tracer.FeedEvents(receipts)
 
 	//Launch EVM and Collect Call Trace data

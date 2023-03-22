@@ -18,6 +18,7 @@
 package eth
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"math/big"
@@ -55,6 +56,9 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
+
+	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
 )
 
 // Config contains the configuration options of the ETH protocol.
@@ -207,7 +211,12 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 		config.TxPool.Journal = stack.ResolvePath(config.TxPool.Journal)
 	}
 	eth.txPool = txpool.NewTxPool(config.TxPool, eth.blockchain.Config(), eth.blockchain)
+	////////////////////////////////////////////////////////
+	tracer := mamoru.NewTracer(mamoru.NewFeed(eth.blockchain.Config()))
+	sniffer := mempool.NewSniffer(context.Background(), eth.txPool, eth.blockchain, eth.blockchain.Config(), tracer)
 
+	go sniffer.SnifferLoop()
+	////////////////////////////////////////////////////////
 	// Permit the downloader to use the trie cache allowance during fast sync
 	cacheLimit := cacheConfig.TrieCleanLimit + cacheConfig.TrieDirtyLimit + cacheConfig.SnapshotLimit
 	if eth.handler, err = newHandler(&handlerConfig{
