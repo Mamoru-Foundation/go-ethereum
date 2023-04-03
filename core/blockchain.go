@@ -285,7 +285,7 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 
 	//////////////////////////////////////////////////////////////
 	// Enable Debug mod and Set Tracer
-	if mamoru.IsSnifferEnable() {
+	if !mamoru.IsSnifferEnable() || !mamoru.Connect() {
 		tracer, err := mamoru.NewCallTracer(false)
 		if err != nil {
 			return nil, err
@@ -1491,7 +1491,7 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 	}
 
 	startTime := time.Now()
-	log.Info("Mamoru Sniffer start", "number", block.NumberU64())
+	log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
 	tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
 
 	tracer.FeedBlock(block)
@@ -1501,12 +1501,12 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 	if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
 		callFrames, err := callTracer.GetResult()
 		if err != nil {
-			log.Error("Mamoru Sniffer Tracer Error", "err", err)
+			log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
 			return 0, err
 		}
 		tracer.FeedCalTraces(callFrames, block.NumberU64())
 	}
-	tracer.Send(startTime, block.Number(), block.Hash())
+	tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
 	////////////////////////////////////////////////////////////
 
 	return status, nil
