@@ -18,7 +18,9 @@
 package les
 
 import (
+	"context"
 	"fmt"
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
 	"strings"
 	"time"
 
@@ -161,7 +163,10 @@ func New(stack *node.Node, config *ethconfig.Config) (*LightEthereum, error) {
 	}
 	leth.chainReader = leth.blockchain
 	leth.txPool = light.NewTxPool(leth.chainConfig, leth.blockchain, leth.relay)
-
+	////////////////////////////////////////////////////////
+	// Attach LightTxpool sniffer
+	mempool.NewLightSniffer(context.Background(), leth.txPool, leth.blockchain, chainConfig)
+	////////////////////////////////////////////////////////
 	// Set up checkpoint oracle.
 	leth.oracle = leth.setupOracle(stack, genesisHash, config)
 
