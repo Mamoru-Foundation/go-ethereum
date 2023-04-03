@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 env:
   REPOSITORY: mamorufoundation/go-ethereum-sniffer

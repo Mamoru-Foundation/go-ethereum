@@ -4,11 +4,13 @@ on:
   push:
     branches: 
       - master
+      - develop
 
 
   pull_request:
     branches: 
       - master
+      - develop
 
 
 jobs:
@@ -37,6 +39,7 @@ jobs:
 
     - name: Test Build
       run: |
+        go mod download
         make geth
 
 
