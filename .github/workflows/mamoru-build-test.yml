@@ -39,6 +39,7 @@ jobs:
 
     - name: Test Build
       run: |
+        go mod download
         make geth
 
 
