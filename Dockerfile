@@ -18,10 +18,11 @@ ADD . /go-ethereum
 RUN cd /go-ethereum && go run build/ci.go install ./cmd/geth
 
 # Install the Lighthouse Consensus Client
-RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/v3.5.1/lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz
-RUN tar xvf lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz  \
+ENV LIGHTHOUSE_VERSION=v4.1.0
+RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/${LIGHTHOUSE_VERSION}/lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz
+RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
     && cp lighthouse /usr/local/bin  \
-    && rm lighthouse-v3.5.1-x86_64-unknown-linux-gnu.tar.gz  \
+    && rm lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
     && rm lighthouse
 
 # Pull Geth into a second stage deploy debian container
