@@ -20,7 +20,6 @@ package les
 import (
 	"context"
 	"fmt"
-	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
 	"strings"
 	"time"
 
@@ -51,6 +50,8 @@ import (
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/ethereum/go-ethereum/trie"
+
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
 )
 
 type LightEthereum struct {
