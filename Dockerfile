@@ -4,7 +4,7 @@ ARG VERSION=""
 ARG BUILDNUM=""
 
 # Build Geth in a stock Go builder container
-FROM golang:1.19 as builder
+FROM golang:1.20 as builder
 
 RUN apt-get update  \
     && apt-get install -y  gcc musl-dev git curl tar libc6-dev
