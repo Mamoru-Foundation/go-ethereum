@@ -33,10 +33,10 @@ github.com/DATA-DOG/go-sqlmock v1.3.3/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q
 github.com/DataDog/zstd v1.5.2 h1:vUG4lAyuPCXO0TLbXvPv7EB7cNK1QV/luu55UHLrrn8=
 github.com/DataDog/zstd v1.5.2/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwSAmyw=
 github.com/Joker/hpp v1.0.0/go.mod h1:8x5n+M1Hp5hC0g8okX3sR3vFQwynaX/UgSOM9MeBKzY=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.3.1 h1:QZwC9HOJxAV/xOTy/TAWsI9Q++7aSnwKzAuro8JYHyM=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.3.1/go.mod h1:Sx/0dvDhscgBCGnw/EhLBCXnJKb/EWDosfcaUt6Fals=
-github.com/Mamoru-Foundation/mamoru-sniffer-go v0.3.0 h1:EYSUBi0u98G5/fYDzioM0V1EVe3GaNHJywSrXaJRTF8=
-github.com/Mamoru-Foundation/mamoru-sniffer-go v0.3.0/go.mod h1:hnmSj2y/1Ddi4I5tyXVyMPIHslvfNZARuLpbVKwr32s=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.4.0 h1:cMIilC1n5mmHuovKifGGD9KXAJ485EpsrZfBulBeois=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.4.0/go.mod h1:ISXzIXJ5y+0dV77hA4wtPB0AfVVQa0Su8cXeyJ6oR58=
+github.com/Mamoru-Foundation/mamoru-sniffer-go v0.4.0 h1:xeUx+zm5NvXE7lVlApFxpq3HQ9dqn7dfYnlTQjDGjGY=
+github.com/Mamoru-Foundation/mamoru-sniffer-go v0.4.0/go.mod h1:hnmSj2y/1Ddi4I5tyXVyMPIHslvfNZARuLpbVKwr32s=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
 github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 h1:fLjPD/aNc3UIOA6tDi6QXUemppXK3P9BI7mr2hd6gx8=
