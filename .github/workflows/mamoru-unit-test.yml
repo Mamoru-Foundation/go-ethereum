@@ -13,7 +13,9 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+
+    runs-on: self-hosted
+
     steps:
     - name: Install Go
       uses: actions/setup-go@v3
@@ -39,7 +41,11 @@ jobs:
     - name: Unit Test
       env:
         ANDROID_HOME: "" # Skip android test
-      run: go test -p 1 -timeout 1h   ./tests/...  ./cmd/geth/...
+      run: |
+        go mod download
+        make test
+
+        
 
 
 

@@ -226,6 +226,8 @@ type BlockChain struct {
 	processor  Processor // Block transaction processor interface
 	forker     *ForkChoice
 	vmConfig   vm.Config
+
+	Sniffer *mamoru.Sniffer // Mamoru Sniffer
 }
 
 // NewBlockChain returns a fully initialised block chain using information
@@ -272,6 +274,8 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 		futureBlocks:  lru.NewCache[common.Hash, *types.Block](maxFutureBlocks),
 		engine:        engine,
 		vmConfig:      vmConfig,
+
+		Sniffer: mamoru.NewSniffer(), // Mamoru Sniffer
 	}
 	bc.flushInterval.Store(int64(cacheConfig.TrieTimeLimit))
 	bc.forker = NewForkChoice(bc, shouldPreserve)
@@ -283,8 +287,8 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 	var err error
 
 	//////////////////////////////////////////////////////////////
-	// Enable Debug mod and Set Tracer
-	if !mamoru.IsSnifferEnable() || !mamoru.Connect() {
+	// Enable Debug mod and Set Mamoru Tracer
+	if bc.Sniffer.CheckRequirements() {
 		tracer, err := mamoru.NewCallTracer(false)
 		if err != nil {
 			return nil, err
@@ -1485,8 +1489,8 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 	}
 
 	////////////////////////////////////////////////////////////
-	if !mamoru.IsSnifferEnable() || !mamoru.Connect() {
-		return 0, nil
+	if !bc.Sniffer.CheckRequirements() {
+		return status, nil
 	}
 
 	startTime := time.Now()
