@@ -127,4 +127,4 @@ require (
 	rsc.io/tmplfunc v0.0.3 // indirect
 )
 
-require github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.4.0
+require github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.4.1

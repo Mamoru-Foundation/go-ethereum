@@ -452,11 +452,7 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header, checkFreq int) (i
 		lc.chainSideFeed.Send(core.ChainSideEvent{Block: block})
 	}
 	//////////////////////////////////////////////////////////////////
-	if lc.Sniffer == nil || !lc.Sniffer.IsSnifferEnable() || !lc.Sniffer.Connect() {
-		return 0, nil
-	}
-
-	if !lc.Sniffer.CheckSynced() {
+	if !lc.Sniffer.CheckRequirements() {
 		return 0, nil
 	}
 

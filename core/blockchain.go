@@ -289,7 +289,7 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 
 	//////////////////////////////////////////////////////////////
 	// Enable Debug mod and Set Mamoru Tracer
-	if bc.Sniffer.IsSnifferEnable() || bc.Sniffer.Connect() {
+	if bc.Sniffer.CheckRequirements() {
 		tracer, err := mamoru.NewCallTracer(false)
 		if err != nil {
 			return nil, err
@@ -1490,11 +1490,7 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 	}
 
 	////////////////////////////////////////////////////////////
-	if bc.Sniffer == nil || !bc.Sniffer.IsSnifferEnable() || !bc.Sniffer.Connect() {
-		return status, nil
-	}
-
-	if !bc.Sniffer.CheckSynced() {
+	if !bc.Sniffer.CheckRequirements() {
 		return status, nil
 	}
 
