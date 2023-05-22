@@ -238,6 +238,10 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	}); err != nil {
 		return nil, err
 	}
+	////////////////////////////////////////////////////////
+	// Attach downloader to sniffer
+	eth.blockchain.Sniffer.SetDownloader(eth.handler.downloader)
+	////////////////////////////////////////////////////////
 
 	eth.miner = miner.New(eth, &config.Miner, eth.blockchain.Config(), eth.EventMux(), eth.engine, eth.isLocalBlock)
 	eth.miner.SetExtra(makeExtraData(config.Miner.ExtraData))

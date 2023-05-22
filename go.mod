@@ -72,7 +72,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v0.21.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v0.8.3 // indirect
 	github.com/DataDog/zstd v1.5.2 // indirect
-	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.3.0 // indirect
+	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.4.0 // indirect
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.0.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.0.2 // indirect
@@ -127,4 +127,4 @@ require (
 	rsc.io/tmplfunc v0.0.3 // indirect
 )
 
-require github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.3.1
+require github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.4.1

@@ -76,6 +76,8 @@ type LightChain struct {
 	running          int32 // whether LightChain is running or stopped
 	procInterrupt    int32 // interrupts chain insert
 	disableCheckFreq int32 // disables header verification
+
+	Sniffer *mamoru.Sniffer // Sniffer for Mamoru
 }
 
 // NewLightChain returns a fully initialised light chain using information
@@ -91,6 +93,8 @@ func NewLightChain(odr OdrBackend, config *params.ChainConfig, engine consensus.
 		bodyRLPCache:  lru.NewCache[common.Hash, rlp.RawValue](bodyCacheLimit),
 		blockCache:    lru.NewCache[common.Hash, *types.Block](blockCacheLimit),
 		engine:        engine,
+
+		Sniffer: mamoru.NewSniffer(), // Sniffer for Mamoru
 	}
 	bc.forker = core.NewForkChoice(bc, nil)
 	var err error
@@ -448,9 +452,10 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header, checkFreq int) (i
 		lc.chainSideFeed.Send(core.ChainSideEvent{Block: block})
 	}
 	//////////////////////////////////////////////////////////////////
-	if !mamoru.IsSnifferEnable() || !mamoru.Connect() {
+	if !lc.Sniffer.CheckRequirements() {
 		return 0, nil
 	}
+
 	ctx := context.Background()
 
 	lastBlock, err := lc.GetBlockByNumber(ctx, block.NumberU64())
