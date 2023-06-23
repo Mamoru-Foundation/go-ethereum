@@ -26,10 +26,11 @@ RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
     && rm lighthouse
 
 # Pull Geth into a second stage deploy debian container
-FROM debian:bullseye-slim
+FROM golang:1.20
+#debian:bullseye-slim
 
 RUN apt-get update  \
-    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor  \
+    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor \
     && apt-get clean
 
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
