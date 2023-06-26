@@ -26,7 +26,7 @@ RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
     && rm lighthouse
 
 # Pull Geth into a second stage deploy debian container
-FROM golang:1.20
+FROM debian:12.0-slim
 #debian:bullseye-slim
 
 RUN apt-get update  \
