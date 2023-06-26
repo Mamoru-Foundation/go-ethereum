@@ -36,7 +36,7 @@ RUN apt-get update  \
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
 
-COPY docker/supervisord/light_supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/supervisord/gethlighthousebn.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 9000 8545 8546 8551 30303 30303/udp
 
