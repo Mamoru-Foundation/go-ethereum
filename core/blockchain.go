@@ -289,14 +289,12 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 
 	//////////////////////////////////////////////////////////////
 	// Enable Debug mod and Set Mamoru Tracer
-	if bc.Sniffer.CheckRequirements() {
-		tracer, err := mamoru.NewCallTracer(false)
-		if err != nil {
-			return nil, err
-		}
-		bc.vmConfig.Tracer = tracer
-		bc.vmConfig.Debug = true
+	tracer, err := mamoru.NewCallTracer(false)
+	if err != nil {
+		return nil, err
 	}
+	bc.vmConfig.Tracer = tracer
+	bc.vmConfig.Debug = true
 	//////////////////////////////////////////////////////////////
 
 	bc.hc, err = NewHeaderChain(db, chainConfig, engine, bc.insertStopped)
