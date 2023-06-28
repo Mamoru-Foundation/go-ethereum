@@ -35,6 +35,8 @@ github.com/DataDog/zstd v1.5.2/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwS
 github.com/Joker/hpp v1.0.0/go.mod h1:8x5n+M1Hp5hC0g8okX3sR3vFQwynaX/UgSOM9MeBKzY=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.1 h1:O00yixRyV1VnvNu48JugWvHxi2f5BwZwwWfYz5bdazU=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.1/go.mod h1:oxl0iIUCZAXfcDTWqwThiCqg3MTHHkdpZyf5jtPsM2U=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.2 h1:WDAj6htEFP2UGqQ0YuJ3BukjjIWcKgu2AHd9SzR/qEw=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.2/go.mod h1:lwGCvc35NEXO56zSccrK42fOdqwzjM8eehQPHFvrC4s=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.1-dev h1:UWijO0devMxjXcvvvpr0NvQjm3slzRbZNe6bIpcyMao=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.1-dev/go.mod h1:lwGCvc35NEXO56zSccrK42fOdqwzjM8eehQPHFvrC4s=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.11.5-1.5.1-dev2 h1:5UV3zn8cvHS4P+rPtaRNXKFCviLD81yYkh6sfjmjZ3g=
