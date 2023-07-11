@@ -1486,30 +1486,6 @@ func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types
 		bc.chainSideFeed.Send(ChainSideEvent{Block: block})
 	}
 
-	////////////////////////////////////////////////////////////
-	if !bc.Sniffer.CheckRequirements() {
-		return status, nil
-	}
-
-	startTime := time.Now()
-	log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-	tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
-
-	tracer.FeedBlock(block)
-	tracer.FeedTransactions(block.Number(), block.Transactions(), receipts)
-	tracer.FeedEvents(receipts)
-	// Collect Call Trace data  from EVM
-	if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
-		callFrames, err := callTracer.GetResult()
-		if err != nil {
-			log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
-			return 0, err
-		}
-		tracer.FeedCalTraces(callFrames, block.NumberU64())
-	}
-	tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
-	////////////////////////////////////////////////////////////
-
 	return status, nil
 }
 
@@ -1839,6 +1815,33 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		if err != nil {
 			return it.index, err
 		}
+
+		///TODO:  Place the future sniffing here
+		////////////////////////////////////////////////////////////
+		log.Info("Mamoru Sniffer", "palace", "insertChain()", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
+		if bc.Sniffer.CheckRequirements() {
+
+			startTime := time.Now()
+			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
+			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
+
+			tracer.FeedBlock(block)
+			tracer.FeedTransactions(block.Number(), block.Transactions(), receipts)
+			tracer.FeedEvents(receipts)
+			// Collect Call Trace data  from EVM
+			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
+				callFrames, err := callTracer.GetResult()
+				if err != nil {
+					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
+					//return it.index, err
+				} else {
+					tracer.FeedCalTraces(callFrames, block.NumberU64())
+				}
+			}
+			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
+		}
+		////////////////////////////////////////////////////////////
+
 		// Update the metrics touched during block commit
 		accountCommitTimer.Update(statedb.AccountCommits)   // Account commits are complete, we can mark them
 		storageCommitTimer.Update(statedb.StorageCommits)   // Storage commits are complete, we can mark them
