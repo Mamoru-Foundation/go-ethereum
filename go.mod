@@ -111,6 +111,7 @@ require (
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
+	github.com/panjf2000/ants/v2 v2.7.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.14.0 // indirect
@@ -128,4 +129,9 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	rsc.io/tmplfunc v0.0.3 // indirect
+)
+
+require (
+	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.1
+	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.6.1 // indirect
 )

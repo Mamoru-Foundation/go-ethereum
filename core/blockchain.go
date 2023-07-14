@@ -293,7 +293,6 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 		return nil, err
 	}
 	bc.vmConfig.Tracer = tracer
-	bc.vmConfig.Debug = true
 	//////////////////////////////////////////////////////////////
 
 	bc.hc, err = NewHeaderChain(db, chainConfig, engine, bc.insertStopped)
@@ -1826,7 +1825,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
 
 			tracer.FeedBlock(block)
-			tracer.FeedTransactions(block.Number(), block.Transactions(), receipts)
+			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
 			tracer.FeedEvents(receipts)
 			// Collect Call Trace data  from EVM
 			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
