@@ -1836,29 +1836,26 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 
 		if bc.Sniffer.CheckRequirements() {
 			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "enter", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-			wg := sync.WaitGroup{}
-			wg.Add(1)
-			go func() {
-				startTime := time.Now()
-				log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-				tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
 
-				tracer.FeedBlock(block)
-				tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
-				tracer.FeedEvents(receipts)
-				// Collect Call Trace data  from EVM
-				if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
-					callFrames, err := callTracer.GetResult()
-					if err != nil {
-						log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
-						//return it.index, err
-					} else {
-						tracer.FeedCalTraces(callFrames, block.NumberU64())
-					}
+			startTime := time.Now()
+			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
+			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
+
+			tracer.FeedBlock(block)
+			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
+			tracer.FeedEvents(receipts)
+			// Collect Call Trace data  from EVM
+			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
+				callFrames, err := callTracer.GetResult()
+				if err != nil {
+					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
+					//return it.index, err
+				} else {
+					tracer.FeedCalTraces(callFrames, block.NumberU64())
 				}
-				tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
-			}()
-			wg.Wait()
+			}
+			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
+
 			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "exit", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
 		}
 

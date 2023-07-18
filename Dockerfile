@@ -15,7 +15,7 @@ COPY go.sum /go-ethereum/
 RUN cd /go-ethereum && go mod download
 
 ADD . /go-ethereum
-RUN cd /go-ethereum && go run build/ci.go install ./cmd/geth
+RUN cd /go-ethereum && GO111MODULE=on go run build/ci.go install
 
 # Install the Lighthouse Consensus Client
 ENV LIGHTHOUSE_VERSION=v4.2.0
@@ -33,7 +33,7 @@ RUN apt-get update  \
     && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor \
     && apt-get clean
 
-COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
+COPY --from=builder /go-ethereum/build/bin/* /usr/local/bin/
 COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
 
 COPY docker/supervisord/gethlighthousebn.conf /etc/supervisor/conf.d/supervisord.conf
