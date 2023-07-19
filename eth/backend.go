@@ -213,7 +213,7 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	eth.txPool = txpool.NewTxPool(config.TxPool, eth.blockchain.Config(), eth.blockchain)
 	////////////////////////////////////////////////////////
 	// Attach txpool sniffer
-	if os.Getenv("MAMORU_TXPOOL_ENABLE") != "" {
+	if os.Getenv("MAMORU_TXPOOL_ENABLE") != "true" {
 		sniffer := mempool.NewSniffer(context.Background(), eth.txPool, eth.blockchain, eth.blockchain.Config(),
 			mamoru.NewFeed(eth.blockchain.Config()))
 		go sniffer.SnifferLoop()
