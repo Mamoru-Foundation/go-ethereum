@@ -15,10 +15,10 @@ COPY go.sum /go-ethereum/
 RUN cd /go-ethereum && go mod download
 
 ADD . /go-ethereum
-RUN cd /go-ethereum && GO111MODULE=on go run build/ci.go install
+RUN cd /go-ethereum && GO111MODULE=on go run build/ci.go install ./cmd/geth
 
 # Install the Lighthouse Consensus Client
-ENV LIGHTHOUSE_VERSION=v4.2.0
+ENV LIGHTHOUSE_VERSION=v4.3.0
 RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/${LIGHTHOUSE_VERSION}/lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz
 RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
     && cp lighthouse /usr/local/bin  \
