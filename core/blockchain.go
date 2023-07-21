@@ -1857,7 +1857,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 					}
 
 					log.Info("Mamoru finish collected", "number", block.NumberU64(), "txs", block.Transactions().Len(),
-						"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxTxpool)
+						"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxBlockchain)
 
 					tracer.FeedCalTraces(callFrames, block.NumberU64())
 				}
