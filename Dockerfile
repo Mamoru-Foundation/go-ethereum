@@ -29,8 +29,8 @@ RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
 # Pull Geth into a second stage deploy debian container
 FROM debian:12.0-slim
 #debian:bullseye-slim
-COPY docker/cron/cron.conf /etc/cron.d/cron.conf
-COPY docker/cron/prune.sh /prune.sh
+#COPY docker/cron/cron.conf /etc/cron.d/cron.conf
+#COPY docker/cron/prune.sh /prune.sh
 
 RUN apt-get update  \
     && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps cron supervisor \

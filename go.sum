@@ -13,8 +13,8 @@ github.com/CloudyKit/jet/v3 v3.0.0/go.mod h1:HKQPgSJmdK8hdoAbKUUWajkHyHo4RaU5rMd
 github.com/DataDog/zstd v1.5.2 h1:vUG4lAyuPCXO0TLbXvPv7EB7cNK1QV/luu55UHLrrn8=
 github.com/DataDog/zstd v1.5.2/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwSAmyw=
 github.com/Joker/hpp v1.0.0/go.mod h1:8x5n+M1Hp5hC0g8okX3sR3vFQwynaX/UgSOM9MeBKzY=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.2-dev h1:/sTN9mMAibd+PBWZalj6yYOyTg61lFrTL/7G49O8RU0=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.2-dev/go.mod h1:9/zuC/dPpk8mTxWDmYZ0DkjMKzsPrk0GplpgXAvrFl0=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.4 h1:g04xJPw9jONwNQGWcB6lfJgYXndHkkGD1DuXs8vfKyo=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.4/go.mod h1:9/zuC/dPpk8mTxWDmYZ0DkjMKzsPrk0GplpgXAvrFl0=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.6.2 h1:m739MW6+5O2Qsas5kOpAt++oWSsd7m4h0hxDYz2v6Ec=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.6.2/go.mod h1:hnmSj2y/1Ddi4I5tyXVyMPIHslvfNZARuLpbVKwr32s=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
