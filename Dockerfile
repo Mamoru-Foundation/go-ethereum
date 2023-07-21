@@ -33,8 +33,9 @@ FROM debian:12.0-slim
 #COPY docker/cron/prune.sh /prune.sh
 
 RUN apt-get update  \
-    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps cron supervisor \
-    && apt-get clean && crontab /etc/cron.d/cron.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf
+    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor \
+    && apt-get clean
+    #&& crontab /etc/cron.d/cron.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf
 
 COPY --from=builder /go-ethereum/build/bin/* /usr/local/bin/
 COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
