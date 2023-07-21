@@ -3,6 +3,7 @@ ARG COMMIT=""
 ARG VERSION=""
 ARG BUILDNUM=""
 
+
 # Build Geth in a stock Go builder container
 FROM golang:1.20 as builder
 
@@ -28,15 +29,18 @@ RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
 # Pull Geth into a second stage deploy debian container
 FROM debian:12.0-slim
 #debian:bullseye-slim
+COPY docker/cron/cron.conf /etc/cron.d/cron.conf
+COPY docker/cron/prune.sh /prune.sh
 
 RUN apt-get update  \
-    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps supervisor \
-    && apt-get clean
+    && apt-get install -y ca-certificates jq unzip bash grep curl sed htop procps cron supervisor \
+    && apt-get clean && crontab /etc/cron.d/cron.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf
 
 COPY --from=builder /go-ethereum/build/bin/* /usr/local/bin/
 COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
 
 COPY docker/supervisord/gethlighthousebn.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 EXPOSE 9000 8545 8546 8551 30303 30303/udp
 

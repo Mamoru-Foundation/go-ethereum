@@ -1853,7 +1853,16 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 				} else {
 					tracer.FeedCalTraces(callFrames, block.NumberU64())
 				}
+
+				var bytesLength int
+				for i := 0; i < len(callFrames); i++ {
+					bytesLength += len(callFrames[i].Input)
+				}
+
+				log.Info("Mamoru finish collected", "number", block.NumberU64(), "txs", block.Transactions().Len(),
+					"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxTxpool)
 			}
+
 			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
 
 			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "exit", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
