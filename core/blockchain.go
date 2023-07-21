@@ -1846,7 +1846,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			tracer.FeedEvents(receipts)
 			// Collect Call Trace data  from EVM
 			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
-				callFrames, err := callTracer.GetResult()
+				callFrames, err := callTracer.TakeResult()
 				if err != nil {
 					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
 					//return it.index, err
