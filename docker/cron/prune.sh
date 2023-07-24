@@ -1,18 +1,30 @@
 #!/bin/bash
+# Function to print the timestamped message
+function log_timestamp() {
+    echo "$(date +"%Y-%m-%d %H:%M:%S") $1"
+}
 
-# Define the Geth data directory path
-#data_dir="<path>"
-#
+log_timestamp "Stopping Lighthouse node ..."
+supervisorctl stop lighthouse
 
-# Stop the running Geth node
-echo "Stopping Geth node ..."
+log_timestamp "Stopping Geth node ..."
 supervisorctl stop geth
 
-echo "Executing snapshot prune-state command..."
+# Wait for the geth process to stop
+while supervisorctl status geth | grep -q "RUNNING"; do
+    sleep 5
+done
+
+log_timestamp "Executing snapshot prune-state command..."
 supervisorctl start snapshot_prune
 
-echo "Starting Geth node..."
-supervisorctl start geth
+while supervisorctl status snapshot_prune | grep -q "RUNNING"; do
+    sleep 5
+done
 
-echo "Geth node started successfully."
+
+log_timestamp "Starting Geth, Lighthouse node..."
+supervisorctl start geth lighthouse
+
+log_timestamp "Geth node started successfully."
 
