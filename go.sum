@@ -17,6 +17,8 @@ github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.9 h1:F24Zs3FV18jzj
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.9/go.mod h1:9/zuC/dPpk8mTxWDmYZ0DkjMKzsPrk0GplpgXAvrFl0=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.10 h1:jQwT2NZa7+KNgRN29i0IBwb90si5SKWHTPfTkmYQ24I=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.10/go.mod h1:9/zuC/dPpk8mTxWDmYZ0DkjMKzsPrk0GplpgXAvrFl0=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.11 h1:I3mdYheDzYIvC6sb18WZCFhqc2Kwys3QHggILbTLoxk=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.6.11/go.mod h1:9/zuC/dPpk8mTxWDmYZ0DkjMKzsPrk0GplpgXAvrFl0=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.6.2 h1:m739MW6+5O2Qsas5kOpAt++oWSsd7m4h0hxDYz2v6Ec=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.6.2/go.mod h1:hnmSj2y/1Ddi4I5tyXVyMPIHslvfNZARuLpbVKwr32s=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
