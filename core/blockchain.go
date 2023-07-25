@@ -1757,8 +1757,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		//////////////////////////////////////////////////////////////
 		if bc.Sniffer.CheckRequirements() {
 			// Enable Debug mod and Set Mamoru Tracer
-			tracer, _ := mamoru.NewCallTracer(false)
-			bc.vmConfig.Tracer = tracer
+			bc.vmConfig.Tracer = mamoru.NewCallTracer(false)
 		}
 		//////////////////////////////////////////////////////////////
 		// Process block using the parent state as reference point
@@ -1828,9 +1827,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		dirty, _ := bc.triedb.Size()
 		stats.report(chain, it.index, dirty, setHead)
 
-		///TODO:  Place the future sniffing here
 		////////////////////////////////////////////////////////////
-
 		if bc.Sniffer.CheckRequirements() {
 			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "enter", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
 
