@@ -286,15 +286,6 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 
 	var err error
 
-	//////////////////////////////////////////////////////////////
-	// Enable Debug mod and Set Mamoru Tracer
-	tracer, err := mamoru.NewCallTracer(false)
-	if err != nil {
-		return nil, err
-	}
-	bc.vmConfig.Tracer = tracer
-	//////////////////////////////////////////////////////////////
-
 	bc.hc, err = NewHeaderChain(db, chainConfig, engine, bc.insertStopped)
 	if err != nil {
 		return nil, err
@@ -1763,7 +1754,13 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 				}(time.Now(), followup, throwaway)
 			}
 		}
-
+		//////////////////////////////////////////////////////////////
+		if bc.Sniffer.CheckRequirements() {
+			// Enable Debug mod and Set Mamoru Tracer
+			tracer, _ := mamoru.NewCallTracer(false)
+			bc.vmConfig.Tracer = tracer
+		}
+		//////////////////////////////////////////////////////////////
 		// Process block using the parent state as reference point
 		pstart := time.Now()
 		receipts, logs, usedGas, err := bc.processor.Process(block, statedb, bc.vmConfig)
