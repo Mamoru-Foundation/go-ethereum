@@ -41,6 +41,7 @@ import (
 
 	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
 	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/call_tracer"
+	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 )
 
 var (
@@ -449,7 +450,7 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header) (int, error) {
 	startTime := time.Now()
 	log.Info("Mamoru Eth Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxLightchain)
 
-	tracer := mamoru.NewTracer(mamoru.NewFeed(lc.Config()))
+	tracer := mamoru.NewTracer(mamoru.NewFeed(lc.Config(), statistics.NewStatsBlockchain()))
 	tracer.FeedBlock(block)
 	tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
 	tracer.FeedEvents(receipts)
@@ -460,11 +461,13 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header) (int, error) {
 		log.Error("Mamoru Eth Sniffer Error", "err", err, "ctx", mamoru.CtxLightchain)
 		return 0, err
 	}
+	var callTraces []*mamoru.CallFrame
 	for _, call := range txTrace {
 		callFrames := call.Result
-		tracer.FeedCalTraces(callFrames, block.NumberU64())
+		callTraces = append(callTraces, callFrames...)
 	}
 
+	tracer.FeedCalTraces(callTraces, block.NumberU64())
 	tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxLightchain)
 	//////////////////////////////////////////////////////////////////
 	return 0, err

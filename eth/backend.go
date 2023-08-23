@@ -21,8 +21,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
-	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
 	"math/big"
 	"os"
 	"runtime"
@@ -59,6 +57,10 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
+
+	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
+	"github.com/Mamoru-Foundation/geth-mamoru-core-sdk/mempool"
+	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 )
 
 // Config contains the configuration options of the ETH protocol.
@@ -215,7 +217,7 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	// Attach txpool sniffer
 	if os.Getenv("MAMORU_TXPOOL_ENABLE") == "true" {
 		sniffer := mempool.NewSniffer(context.Background(), eth.txPool, eth.blockchain, eth.blockchain.Config(),
-			mamoru.NewFeed(eth.blockchain.Config()))
+			mamoru.NewFeed(eth.blockchain.Config(), statistics.NewStatsTxpool()))
 		go sniffer.SnifferLoop()
 	}
 	////////////////////////////////////////////////////////

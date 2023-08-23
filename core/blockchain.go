@@ -50,6 +50,7 @@ import (
 	"github.com/ethereum/go-ethereum/trie"
 
 	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
+	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 )
 
 var (
@@ -1833,7 +1834,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 
 			startTime := time.Now()
 			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig))
+			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain()))
 
 			tracer.FeedBlock(block)
 			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
