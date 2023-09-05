@@ -1859,8 +1859,6 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			}
 
 			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
-
-			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "exit", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
 		}
 
 		////////////////////////////////////////////////////////////
