@@ -1830,10 +1830,9 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 
 		////////////////////////////////////////////////////////////
 		if bc.Sniffer.CheckRequirements() {
-			log.Info("Mamoru Sniffer", "palace", "insertChain()", "block", "enter", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-
 			startTime := time.Now()
 			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
+
 			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain()))
 
 			tracer.FeedBlock(block)
@@ -1854,7 +1853,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 					log.Info("Mamoru finish collected", "number", block.NumberU64(), "txs", block.Transactions().Len(),
 						"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxBlockchain)
 
-					tracer.FeedCalTraces(callFrames, block.NumberU64())
+					tracer.FeedCallTraces(callFrames, block.NumberU64())
 				}
 
 			}

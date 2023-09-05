@@ -467,7 +467,7 @@ func (lc *LightChain) InsertHeaderChain(chain []*types.Header) (int, error) {
 		callTraces = append(callTraces, callFrames...)
 	}
 
-	tracer.FeedCalTraces(callTraces, block.NumberU64())
+	tracer.FeedCallTraces(callTraces, block.NumberU64())
 	tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxLightchain)
 	//////////////////////////////////////////////////////////////////
 	return 0, err
