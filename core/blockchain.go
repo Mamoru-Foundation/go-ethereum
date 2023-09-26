@@ -1757,8 +1757,9 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		}
 		//////////////////////////////////////////////////////////////
 		if bc.Sniffer.CheckRequirements() {
-			// Enable Debug mod and Set Mamoru Tracer
-			bc.vmConfig.Tracer = mamoru.NewCallTracer(false)
+			bc.vmConfig.Tracer = mamoru.NewCallStackTracer(false, mamoru.CtxBlockchain)
+		} else {
+			bc.vmConfig.Tracer = nil
 		}
 		//////////////////////////////////////////////////////////////
 		// Process block using the parent state as reference point
@@ -1838,8 +1839,8 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			tracer.FeedBlock(block)
 			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
 			tracer.FeedEvents(receipts)
-			// Collect Call Trace data  from EVM
-			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallTracer); ok {
+			// Collect Call Trace data from EVM
+			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallStackTracer); ok {
 				callFrames, err := callTracer.TakeResult()
 				if err != nil {
 					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
@@ -1855,7 +1856,6 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 
 					tracer.FeedCallTraces(callFrames, block.NumberU64())
 				}
-
 			}
 
 			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
