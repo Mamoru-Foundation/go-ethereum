@@ -132,6 +132,6 @@ require (
 )
 
 require (
-	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.13
+	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.14
 	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.7.4 // indirect
 )

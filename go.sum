@@ -27,6 +27,8 @@ github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.12 h1:urUUtnrqO1cQ
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.12/go.mod h1:X/C/PiGWpBTwKgAUN5n7FXe+yUZZRuSFD/RQivi9Rf4=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.13 h1:K5P6xsGh6xyqdgHNd+dvdnsdXzgMI/o83k6zBjy2jQU=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.13/go.mod h1:X/C/PiGWpBTwKgAUN5n7FXe+yUZZRuSFD/RQivi9Rf4=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.14 h1:HwggIkB25zOuEKOvmG5SWf3iF8oc8wVf2fhVD3wmBX4=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.14/go.mod h1:X/C/PiGWpBTwKgAUN5n7FXe+yUZZRuSFD/RQivi9Rf4=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.5-a1 h1:O3s2pneg+vNYzPHuIxAT2V5nVkuk7/1BYS2jx41Ivjg=
 github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.12.0-1.7.5-a1/go.mod h1:X/C/PiGWpBTwKgAUN5n7FXe+yUZZRuSFD/RQivi9Rf4=
 github.com/Mamoru-Foundation/mamoru-sniffer-go v0.7.4 h1:CnXivQWPGHzKJG3qeDXP0beo/snb41XrarwfqlWX354=
