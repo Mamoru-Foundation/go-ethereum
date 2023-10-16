@@ -2,6 +2,7 @@ package native
 
 import (
 	"encoding/json"
+
 	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
 
 	"github.com/ethereum/go-ethereum/core/vm"

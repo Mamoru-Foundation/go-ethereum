@@ -1757,7 +1757,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		}
 		//////////////////////////////////////////////////////////////
 		if bc.Sniffer.CheckRequirements() {
-			bc.vmConfig.Tracer = mamoru.NewCallStackTracer(false, mamoru.CtxBlockchain)
+			bc.vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions().Len(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
 		} else {
 			bc.vmConfig.Tracer = nil
 		}
