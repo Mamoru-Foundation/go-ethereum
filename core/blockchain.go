@@ -1746,7 +1746,16 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 				throwaway, _ := state.New(parent.Root, bc.stateCache, bc.snaps)
 
 				go func(start time.Time, followup *types.Block, throwaway *state.StateDB) {
-					bc.prefetcher.Prefetch(followup, throwaway, bc.vmConfig, &followupInterrupt)
+					//////////////////////////// Mamoru /////////////////////////////////
+					vmConfig := vm.Config{
+						Tracer:                  nil,
+						NoBaseFee:               bc.vmConfig.NoBaseFee,
+						EnablePreimageRecording: bc.vmConfig.EnablePreimageRecording,
+						ExtraEips:               bc.vmConfig.ExtraEips,
+					}
+					// bc.prefetcher.Prefetch(followup, throwaway, bc.vmConfig, &followupInterrupt)
+					//////////////////////////// Mamoru /////////////////////////////////
+					bc.prefetcher.Prefetch(followup, throwaway, vmConfig, &followupInterrupt)
 
 					blockPrefetchExecuteTimer.Update(time.Since(start))
 					if followupInterrupt.Load() {
