@@ -229,6 +229,8 @@ type BlockChain struct {
 	vmConfig   vm.Config
 
 	Sniffer *mamoru.Sniffer // Mamoru Sniffer
+	// mamoru Feeder
+	MamoruFeeder mamoru.Feeder
 }
 
 // NewBlockChain returns a fully initialised block chain using information
@@ -276,7 +278,8 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 		engine:        engine,
 		vmConfig:      vmConfig,
 
-		Sniffer: mamoru.NewSniffer(), // Mamoru Sniffer
+		Sniffer:      mamoru.NewSniffer(), // Mamoru Sniffer
+		MamoruFeeder: nil,
 	}
 	bc.flushInterval.Store(int64(cacheConfig.TrieTimeLimit))
 	bc.forker = NewForkChoice(bc, shouldPreserve)
@@ -1765,15 +1768,18 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			}
 		}
 		//////////////////////////////////////////////////////////////
+		var vmConfig vm.Config
 		if bc.Sniffer.CheckRequirements() {
-			bc.vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions().Len(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
+			vmConfig = bc.vmConfig
+			vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions().Len(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
 		} else {
-			bc.vmConfig.Tracer = nil
+			vmConfig = bc.vmConfig
+			vmConfig.Tracer = nil
 		}
 		//////////////////////////////////////////////////////////////
 		// Process block using the parent state as reference point
 		pstart := time.Now()
-		receipts, logs, usedGas, err := bc.processor.Process(block, statedb, bc.vmConfig)
+		receipts, logs, usedGas, err := bc.processor.Process(block, statedb, vmConfig)
 		if err != nil {
 			bc.reportBlock(block, receipts, err)
 			followupInterrupt.Store(true)
@@ -1843,8 +1849,12 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			startTime := time.Now()
 			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
 
-			tracer := mamoru.NewTracer(mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain()))
+			feeder := bc.MamoruFeeder
+			if feeder == nil {
+				feeder = mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain())
+			}
 
+			tracer := mamoru.NewTracer(feeder)
 			tracer.FeedBlock(block)
 			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
 			tracer.FeedEvents(receipts)

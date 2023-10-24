@@ -19,7 +19,7 @@ package miner
 import (
 	"errors"
 	"fmt"
-	"github.com/ethereum/go-ethereum/core/vm"
+
 	"math/big"
 	"sync"
 	"sync/atomic"
@@ -32,6 +32,7 @@ import (
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/event"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
