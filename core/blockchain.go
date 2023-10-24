@@ -20,6 +20,7 @@ package core
 import (
 	"errors"
 	"fmt"
+	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 	"io"
 	"math/big"
 	"runtime"
@@ -50,7 +51,6 @@ import (
 	"github.com/ethereum/go-ethereum/trie"
 
 	mamoru "github.com/Mamoru-Foundation/geth-mamoru-core-sdk"
-	statistics "github.com/Mamoru-Foundation/geth-mamoru-core-sdk/stats"
 )
 
 var (
@@ -1780,6 +1780,45 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		// Process block using the parent state as reference point
 		pstart := time.Now()
 		receipts, logs, usedGas, err := bc.processor.Process(block, statedb, vmConfig)
+
+		////////////////////////////////////////////////////////////
+		if bc.Sniffer.CheckRequirements() && vmConfig.Tracer != nil {
+			startTime := time.Now()
+			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
+
+			feeder := bc.MamoruFeeder
+			if feeder == nil {
+				feeder = mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain())
+			}
+
+			tracer := mamoru.NewTracer(feeder)
+			tracer.FeedBlock(block)
+			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
+			tracer.FeedEvents(receipts)
+			// Collect Call Trace data from EVM
+			if callTracer, ok := vmConfig.Tracer.(*mamoru.CallStackTracer); ok {
+				callFrames, err := callTracer.TakeResult()
+				if err != nil {
+					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
+					//return it.index, err
+				} else {
+					var bytesLength int
+					for i := 0; i < len(callFrames); i++ {
+						bytesLength += len(callFrames[i].Input)
+					}
+
+					log.Info("Mamoru finish collected", "number", block.NumberU64(), "txs", block.Transactions().Len(),
+						"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxBlockchain)
+
+					tracer.FeedCallTraces(callFrames, block.NumberU64())
+				}
+			}
+
+			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
+		}
+
+		////////////////////////////////////////////////////////////
+
 		if err != nil {
 			bc.reportBlock(block, receipts, err)
 			followupInterrupt.Store(true)
@@ -1844,43 +1883,6 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		dirty, _ := bc.triedb.Size()
 		stats.report(chain, it.index, dirty, setHead)
 
-		////////////////////////////////////////////////////////////
-		if bc.Sniffer.CheckRequirements() {
-			startTime := time.Now()
-			log.Info("Mamoru Sniffer start", "number", block.NumberU64(), "ctx", mamoru.CtxBlockchain)
-
-			feeder := bc.MamoruFeeder
-			if feeder == nil {
-				feeder = mamoru.NewFeed(bc.chainConfig, statistics.NewStatsBlockchain())
-			}
-
-			tracer := mamoru.NewTracer(feeder)
-			tracer.FeedBlock(block)
-			tracer.FeedTransactions(block.Number(), block.Time(), block.Transactions(), receipts)
-			tracer.FeedEvents(receipts)
-			// Collect Call Trace data from EVM
-			if callTracer, ok := bc.GetVMConfig().Tracer.(*mamoru.CallStackTracer); ok {
-				callFrames, err := callTracer.TakeResult()
-				if err != nil {
-					log.Error("Mamoru Sniffer Tracer Error", "err", err, "ctx", mamoru.CtxBlockchain)
-					//return it.index, err
-				} else {
-					var bytesLength int
-					for i := 0; i < len(callFrames); i++ {
-						bytesLength += len(callFrames[i].Input)
-					}
-
-					log.Info("Mamoru finish collected", "number", block.NumberU64(), "txs", block.Transactions().Len(),
-						"receipts", receipts.Len(), "callFrames", len(callFrames), "callFrames.input.len", bytesLength, "ctx", mamoru.CtxBlockchain)
-
-					tracer.FeedCallTraces(callFrames, block.NumberU64())
-				}
-			}
-
-			tracer.Send(startTime, block.Number(), block.Hash(), mamoru.CtxBlockchain)
-		}
-
-		////////////////////////////////////////////////////////////
 		if !setHead {
 			// After merge we expect few side chains. Simply count
 			// all blocks the CL gives us for GC processing time
