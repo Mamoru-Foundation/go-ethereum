@@ -1771,7 +1771,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 		var vmConfig vm.Config
 		if bc.Sniffer.CheckRequirements() {
 			vmConfig = bc.vmConfig
-			vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions().Len(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
+			vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
 		} else {
 			vmConfig = bc.vmConfig
 			vmConfig.Tracer = nil
