@@ -216,9 +216,8 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	////////////////////////////////////////////////////////
 	// Attach txpool sniffer
 	if os.Getenv("MAMORU_TXPOOL_ENABLE") == "true" {
-		sniffer := mempool.NewSniffer(context.Background(), eth.txPool, eth.blockchain, eth.blockchain.Config(),
+		mempool.NewSniffer(context.Background(), eth.txPool, eth.blockchain, eth.blockchain.Config(),
 			mamoru.NewFeed(eth.blockchain.Config(), statistics.NewStatsTxpool()))
-		go sniffer.SnifferLoop()
 	}
 	////////////////////////////////////////////////////////
 	// Permit the downloader to use the trie cache allowance during fast sync
