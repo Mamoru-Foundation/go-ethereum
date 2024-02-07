@@ -1788,8 +1788,12 @@ func (bc *BlockChain) insertChain(chain types.Blocks, setHead bool) (int, error)
 			vmConfig = bc.vmConfig
 			vmConfig.Tracer = mamoru.NewCallStackTracer(block.Transactions(), mamoru.RandStr(8), false, mamoru.CtxBlockchain)
 		} else {
-			vmConfig = bc.vmConfig
-			vmConfig.Tracer = nil
+			vmConfig = vm.Config{
+				Tracer:                  nil,
+				NoBaseFee:               bc.vmConfig.NoBaseFee,
+				EnablePreimageRecording: bc.vmConfig.EnablePreimageRecording,
+				ExtraEips:               bc.vmConfig.ExtraEips,
+			}
 		}
 		//////////////////////////////////////////////////////////////
 		// Process block using the parent state as reference point
