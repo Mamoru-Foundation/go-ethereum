@@ -18,7 +18,7 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 # Get dependencies - will also be cached if we won't change go.mod/go.sum
 COPY go.mod /go-ethereum/
 COPY go.sum /go-ethereum/
-RUN cd /go-ethereum && go mod download
+RUN --mount=type=ssh  cd /go-ethereum &&  go mod download
 
 ADD . /go-ethereum
 RUN cd /go-ethereum && GO111MODULE=on go run build/ci.go install ./cmd/geth

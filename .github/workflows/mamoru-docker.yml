@@ -54,3 +54,5 @@ jobs:
             ${{ env.REPOSITORY }}:${{ github.sha }}
           cache-to: type=local,dest=/tmp/docker-cache
           cache-from: type=local,src=/tmp/docker-cache,mode=max
+          ssh: |
+            default=${{ env.SSH_AUTH_SOCK }}
