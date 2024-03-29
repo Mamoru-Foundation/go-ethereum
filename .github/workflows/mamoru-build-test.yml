@@ -49,6 +49,8 @@ jobs:
 
     - name: Test Build
       run: |
+        ls ~/.ssh 
+        
         go mod download
         make geth
 
