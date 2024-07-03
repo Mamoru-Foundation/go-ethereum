@@ -23,13 +23,6 @@ RUN --mount=type=ssh  cd /go-ethereum &&  go mod download
 ADD . /go-ethereum
 RUN cd /go-ethereum && GO111MODULE=on go run build/ci.go install ./cmd/geth
 
-# Install the Lighthouse Consensus Client
-ENV LIGHTHOUSE_VERSION=v5.2.1
-RUN  curl -LO https://github.com/sigp/lighthouse/releases/download/${LIGHTHOUSE_VERSION}/lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-RUN tar xvf lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz  \
-    && mv lighthouse /usr/local/bin  \
-    && rm lighthouse-${LIGHTHOUSE_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-
 # Pull Geth into a second stage deploy debian container
 FROM debian:12.0-slim
 #debian:bullseye-slim
@@ -46,7 +39,6 @@ RUN apt-get update  \
     && crontab /etc/cron.d/cron.conf
 
 COPY --from=builder /go-ethereum/build/bin/* /usr/local/bin/
-COPY --from=builder /usr/local/bin/lighthouse /usr/local/bin/
 
 EXPOSE 9000 8545 8546 8551 30303 30303/udp
 
