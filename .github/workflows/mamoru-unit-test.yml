@@ -45,13 +45,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-
-    - name: Set Git to use SSH for GitHub
-      run: git config --global url."git@github.com:".insteadOf "https://github.com/"
-
-    - name: Set Git to use SSH for GitHub
-      run: git config --global url."ssh://git@github.com:".insteadOf "https://github.com/"
-
     - name: Unit Test
       env:
         ANDROID_HOME: "" # Skip android test

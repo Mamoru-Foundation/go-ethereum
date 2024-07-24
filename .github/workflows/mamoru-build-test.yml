@@ -44,11 +44,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-
-
-    - name: Set Git to use SSH for GitHub
-      run: git config --global url."git@github.com:".insteadOf "https://github.com/"
-
     - name: Test Build
       run: |
         go mod download
