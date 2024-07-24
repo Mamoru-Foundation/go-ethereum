@@ -16,10 +16,10 @@ github.com/CloudyKit/jet/v3 v3.0.0/go.mod h1:HKQPgSJmdK8hdoAbKUUWajkHyHo4RaU5rMd
 github.com/DataDog/zstd v1.5.2 h1:vUG4lAyuPCXO0TLbXvPv7EB7cNK1QV/luu55UHLrrn8=
 github.com/DataDog/zstd v1.5.2/go.mod h1:g4AWEaM3yOg3HYfnJ3YIawPnVdXJh9QME85blwSAmyw=
 github.com/Joker/hpp v1.0.0/go.mod h1:8x5n+M1Hp5hC0g8okX3sR3vFQwynaX/UgSOM9MeBKzY=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.11.3 h1:3bcwGbYN5ej8NhLEq2Fm3e4KlFpZQ2DdQMqRxNDN0tQ=
-github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.11.3/go.mod h1:NnmslG6FSJSDWYtKEwj5hpHa3F/ytmbvs5wVV2mlr54=
-github.com/Mamoru-Foundation/mamoru-sniffer-go v0.12.2 h1:wJMtNBxBKk4DvMEW6NlLdeuYidJoFnRRBCk9wzr/IaQ=
-github.com/Mamoru-Foundation/mamoru-sniffer-go v0.12.2/go.mod h1:u2UBuNW7Wxz5sL533/hygPYIt25EDGmWzoUuZ9XqtGo=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.13.6 h1:evS2wO+BLYgXFNkCJPHM4tzLK00459QmN2ykOE7BYMg=
+github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.13.6/go.mod h1:D90QGRDCf+Hgm3xlZL74O35H/IZHSJLAy5+Pv2YpoZY=
+github.com/Mamoru-Foundation/mamoru-sniffer-go v0.13.6 h1:rU1QC6rVA3Mwczt9V2akYOfRpI+KUjaggmmQEoJYQ6c=
+github.com/Mamoru-Foundation/mamoru-sniffer-go v0.13.6/go.mod h1:u2UBuNW7Wxz5sL533/hygPYIt25EDGmWzoUuZ9XqtGo=
 github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migciow=
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=

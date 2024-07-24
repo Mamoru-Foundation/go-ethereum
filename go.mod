@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.2.0
-	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.11.3
-	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.12.2
+	github.com/Mamoru-Foundation/geth-mamoru-core-sdk v1.13.11-0.13.6
+	github.com/Mamoru-Foundation/mamoru-sniffer-go v0.13.6
 	github.com/Microsoft/go-winio v0.6.1
 	github.com/VictoriaMetrics/fastcache v1.12.1
 	github.com/aws/aws-sdk-go-v2 v1.21.2
